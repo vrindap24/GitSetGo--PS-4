@@ -40,6 +40,23 @@ class StaffPerformance(BaseModel):
     total_tagged_reviews: int
 
 
+class NetworkMapBranch(BaseModel):
+    id: str
+    name: str
+    lat: float
+    lng: float
+    purityScore: int
+    status: str
+
+
+class MenuDish(BaseModel):
+    name: str
+    score: int
+    mentions: int
+    type: str
+    trend: str
+
+
 class EscalationUpdate(BaseModel):
     status: Optional[str] = None
     resolution_notes: Optional[str] = None
@@ -68,6 +85,24 @@ async def staff_performance(
 ):
     """Get staff performance metrics for a branch."""
     return analytics_service.get_staff_performance(branch_id)
+
+
+@router.get("/analytics/network-map", response_model=list[NetworkMapBranch])
+async def network_map():
+    """Get branch health data for global map visualization."""
+    return analytics_service.get_network_map()
+
+
+@router.get("/analytics/sentiment-categories")
+async def sentiment_categories():
+    """Get breakdown of sentiment per category."""
+    return analytics_service.get_sentiment_categories()
+
+
+@router.get("/analytics/menu-intelligence", response_model=list[MenuDish])
+async def menu_intelligence():
+    """Get dish-level sentiment analysis (Hero/Zero dishes)."""
+    return analytics_service.get_menu_intelligence()
 
 
 # ---------------------------------------------------------------------------

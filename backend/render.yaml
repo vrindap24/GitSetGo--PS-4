@@ -9,7 +9,11 @@ services:
     envVars:
       - key: FIREBASE_CREDENTIALS_PATH
         sync: false
+      - key: GOOGLE_CREDENTIALS_JSON
+        sync: false
       - key: GEMINI_API_KEY
+        sync: false
+      - key: INTERNAL_API_KEY
         sync: false
       - key: ESCALATION_THRESHOLD
         value: "70"

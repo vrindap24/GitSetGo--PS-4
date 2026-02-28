@@ -15,6 +15,8 @@ class BranchCreate(BaseModel):
     location: str = Field(..., min_length=1, description="Branch location / address")
     manager_name: str = Field(..., min_length=1, description="Branch manager name")
     manager_contact: str = Field(..., min_length=1, description="Manager phone or email")
+    lat: float = Field(0.0, description="Latitude")
+    lng: float = Field(0.0, description="Longitude")
 
 
 class BranchResponse(BaseModel):
@@ -25,4 +27,6 @@ class BranchResponse(BaseModel):
     location: str
     manager_name: str
     manager_contact: str
+    lat: float
+    lng: float
     created_at: Optional[datetime] = None

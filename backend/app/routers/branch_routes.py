@@ -24,6 +24,8 @@ async def create_branch(branch: BranchCreate):
         location=branch.location,
         manager_name=branch.manager_name,
         manager_contact=branch.manager_contact,
+        lat=branch.lat,
+        lng=branch.lng,
     )
 
     _, doc_ref = db.collection("branches").add(model.to_dict())
@@ -36,6 +38,8 @@ async def create_branch(branch: BranchCreate):
         location=branch.location,
         manager_name=branch.manager_name,
         manager_contact=branch.manager_contact,
+        lat=branch.lat,
+        lng=branch.lng,
         created_at=model.created_at,
     )
 

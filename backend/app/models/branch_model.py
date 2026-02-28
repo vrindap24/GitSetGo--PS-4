@@ -15,12 +15,16 @@ class BranchModel:
         location: str = "",
         manager_name: str = "",
         manager_contact: str = "",
+        lat: float = 0.0,
+        lng: float = 0.0,
         created_at: datetime | None = None,
     ):
         self.branch_name = branch_name
         self.location = location
         self.manager_name = manager_name
         self.manager_contact = manager_contact
+        self.lat = lat
+        self.lng = lng
         self.created_at = created_at or datetime.now(timezone.utc)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,6 +34,8 @@ class BranchModel:
             "location": self.location,
             "manager_name": self.manager_name,
             "manager_contact": self.manager_contact,
+            "lat": self.lat,
+            "lng": self.lng,
             "created_at": self.created_at,
         }
 
@@ -41,5 +47,7 @@ class BranchModel:
             location=data.get("location", ""),
             manager_name=data.get("manager_name", ""),
             manager_contact=data.get("manager_contact", ""),
+            lat=data.get("lat", 0.0),
+            lng=data.get("lng", 0.0),
             created_at=data.get("created_at"),
         )

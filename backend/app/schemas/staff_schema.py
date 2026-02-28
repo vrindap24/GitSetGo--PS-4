@@ -25,4 +25,7 @@ class StaffResponse(BaseModel):
     staff_name: str
     role: str
     active_status: bool
+    credits: int = 0
+    positive_mentions_count: int = 0
+    current_rank: int = 0
     created_at: Optional[datetime] = None

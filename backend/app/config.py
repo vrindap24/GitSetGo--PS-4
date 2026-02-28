@@ -1,6 +1,7 @@
 """Application settings loaded from environment variables."""
 
 from functools import lru_cache
+
 from pydantic_settings import BaseSettings
 
 
@@ -12,6 +13,7 @@ class Settings(BaseSettings):
 
     # Firebase
     firebase_credentials_path: str = "./firebase-credentials.json"
+    google_credentials_json: str = ""  # Base64-encoded JSON for Render deployment
 
     # Gemini AI
     gemini_api_key: str = ""
@@ -19,12 +21,18 @@ class Settings(BaseSettings):
     # Escalation
     escalation_threshold: int = 70
 
+    # API Key Protection
+    internal_api_key: str = ""
+
     # Notification placeholders (replace with real API keys)
     whatsapp_api_key: str = ""
     sms_api_key: str = ""
 
     # CORS
-    allowed_origins: str = "http://localhost:3000"
+    allowed_origins: str = "http://localhost:3000,http://localhost:5173,http://localhost:3001"
+
+    # Constants
+    max_review_length: int = 1000
 
     @property
     def cors_origins(self) -> list[str]:

@@ -73,9 +73,11 @@ class ReviewCreate(BaseModel):
     platform: Platform = Platform.INTERNAL
     branch_id: str = Field(..., min_length=1, description="Branch document ID")
     rating: int = Field(..., ge=1, le=5, description="Rating from 1 to 5")
-    review_text: str = Field(..., min_length=1, description="Review content")
-    reviewer_name: Optional[str] = None
-    staff_tagged: Optional[str] = None
+    review_text: str = Field(
+        ..., min_length=3, max_length=1000, description="Review content (3-1000 chars)"
+    )
+    reviewer_name: Optional[str] = Field(None, max_length=100)
+    staff_tagged: Optional[str] = Field(None, min_length=1)
 
     model_config = {"json_schema_extra": {
         "examples": [

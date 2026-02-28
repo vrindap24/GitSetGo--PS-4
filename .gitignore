@@ -13,8 +13,38 @@ build/
 venv/
 ENV/
 
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Logs
+*.log
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Distribution
+dist/
+build/
+out/
+.next/
+.vercel/
+*.tar.gz
+*.whl
+
 # Environment variables
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
 
 # Firebase credentials
 **/firebase-credentials.json
@@ -25,14 +55,11 @@ ENV/
 .idea/
 *.swp
 *.swo
+.project
+.classpath
+.settings/
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-
-# Distribution
-*.tar.gz
-*.whl
+desktop.ini

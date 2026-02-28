@@ -140,3 +140,99 @@ def get_staff_performance(branch_id: str) -> list[dict[str, Any]]:
         )
 
     return results
+
+
+def get_network_map() -> list[dict[str, Any]]:
+    """Aggregates branch health for the Global Map."""
+    db = get_db()
+    branches = []
+    
+    # 1. Get all branches
+    for doc in db.collection("branches").stream():
+        data = doc.to_dict()
+        branches.append({
+            "id": doc.id,
+            "name": data.get("branch_name", "Unknown"),
+            "lat": data.get("lat", 0.0),
+            "lng": data.get("lng", 0.0),
+            "purityScore": 100,
+            "total_reviews": 0,
+            "negative_reviews": 0
+        })
+
+    # 2. Aggregate review sentiment per branch
+    for doc in db.collection("reviews").stream():
+        data = doc.to_dict()
+        bid = data.get("branch_id")
+        ai = data.get("ai_analysis")
+        if not bid or not ai: continue
+            
+        for b in branches:
+            if b["id"] == bid:
+                b["total_reviews"] += 1
+                if ai.get("sentiment_label") == "Negative":
+                    b["negative_reviews"] += 1
+                break
+
+    # 3. Finalize scores
+    for b in branches:
+        if b["total_reviews"] > 0:
+            neg_pct = (b["negative_reviews"] / b["total_reviews"]) * 100
+            b["purityScore"] = max(0, int(100 - neg_pct))
+        
+        if b["purityScore"] >= 90: b["status"] = "Green"
+        elif b["purityScore"] >= 75: b["status"] = "Yellow"
+        else: b["status"] = "Red"
+
+    return branches
+
+
+def get_sentiment_categories() -> dict[str, dict[str, int]]:
+    """Breakdown of sentiment per category."""
+    db = get_db()
+    agg = defaultdict(lambda: Counter())
+    
+    for doc in db.collection("reviews").stream():
+        ai = doc.to_dict().get("ai_analysis")
+        if not ai: continue
+        
+        sentiment = ai.get("sentiment_label", "Neutral")
+        for cat in ai.get("categories", []):
+            agg[cat][sentiment] += 1
+            
+    return {cat: dict(counts) for cat, counts in agg.items()}
+
+
+def get_menu_intelligence() -> list[dict[str, Any]]:
+    """Identifies 'Hero' and 'Zero' dishes powered by AI analysis."""
+    db = get_db()
+    dishes = defaultdict(lambda: {"score": 0, "mentions": 0})
+    pure_veg_dishes = ["paneer tikka", "dal tadka", "veg pulao", "misal pav", "kaju masala", "butter naan"]
+    
+    for doc in db.collection("reviews").stream():
+        data = doc.to_dict()
+        ai = data.get("ai_analysis")
+        if not ai or "Food" not in ai.get("categories", []): continue
+            
+        text = data.get("review_text", "").lower()
+        sentiment = ai.get("sentiment_label", "Neutral")
+        
+        for dish in pure_veg_dishes:
+            if dish in text:
+                dishes[dish]["mentions"] += 1
+                if sentiment == "Positive": dishes[dish]["score"] += 1
+                elif sentiment == "Negative": dishes[dish]["score"] -= 1
+
+    results = []
+    for name, stats in dishes.items():
+        if stats["mentions"] > 0:
+            final_score = int(((stats["score"] / stats["mentions"]) + 1) * 50)
+            results.append({
+                "name": name.title(),
+                "score": final_score,
+                "mentions": stats["mentions"],
+                "type": "Hero" if final_score >= 75 else ("Zero" if final_score <= 40 else "Neutral"),
+                "trend": "up" if stats["score"] > 0 else "down"
+            })
+            
+    return sorted(results, key=lambda x: x["score"], reverse=True)

@@ -7,13 +7,17 @@ from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
 
+from app.config import get_settings
 from app.firebase import get_db
 from app.models.review_model import ReviewModel
 from app.schemas.review_schema import ReviewCreate, ReviewResponse
 from app.services.review_processor import process_review
+from app.utils.sanitize import sanitize_review_text
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+
+_MAX_REVIEW_LENGTH = get_settings().max_review_length
 
 
 @router.post("/reviews", response_model=ReviewResponse, status_code=201)
@@ -23,16 +27,25 @@ async def create_review(
 ):
     """Submit a new review.
 
-    Saves the review to Firestore with ``processed=False`` and triggers
-    background AI processing.
+    Validates and sanitizes input, saves to Firestore with ``processed=False``,
+    and triggers background AI processing.
     """
     db = get_db()
+
+    # ── Server-side sanitization ─────────────────────────────────────────
+    clean_text = sanitize_review_text(review.review_text, _MAX_REVIEW_LENGTH)
+
+    if len(clean_text) < 3:
+        raise HTTPException(
+            status_code=400,
+            detail="Review text is too short after sanitization (min 3 characters).",
+        )
 
     model = ReviewModel(
         platform=review.platform.value,
         branch_id=review.branch_id,
         rating=review.rating,
-        review_text=review.review_text,
+        review_text=clean_text,
         reviewer_name=review.reviewer_name,
         staff_tagged=review.staff_tagged,
         processed=False,
@@ -42,7 +55,7 @@ async def create_review(
     review_id = doc_ref.id
     logger.info("Review created: %s – queuing AI processing.", review_id)
 
-    # Trigger background processing
+    # Trigger non-blocking background processing
     background_tasks.add_task(process_review, review_id)
 
     return ReviewResponse(
@@ -50,7 +63,7 @@ async def create_review(
         platform=review.platform,
         branch_id=review.branch_id,
         rating=review.rating,
-        review_text=review.review_text,
+        review_text=clean_text,
         reviewer_name=review.reviewer_name,
         staff_tagged=review.staff_tagged,
         timestamp=model.timestamp,
