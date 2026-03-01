@@ -32,6 +32,7 @@ import {
 } from 'recharts';
 import { BRANCHES, REVIEWS } from '../data/mockData';
 import AgentTimeline from '../components/AgentTimeline';
+import LiveAgentsNetwork from '../components/LiveAgentsNetwork';
 import { fetchReviews } from '../services/apiService';
 import { ReviewBackend } from '../types';
 
@@ -428,6 +429,11 @@ export default function HQDashboard() {
 
   return (
     <div className="grid grid-cols-12 gap-6 pb-20">
+      {/* Row 0: Live AI Agents Banner */}
+      <div className="col-span-12">
+        <LiveAgentsNetwork />
+      </div>
+
       {/* Row 1: Top Level Map (Left) and Agents (Right) */}
       <div className="col-span-12 lg:col-span-9 space-y-6">
         <NetworkHealthMap />
