@@ -39,16 +39,25 @@ def init_firebase() -> None:
     settings = get_settings()
 
     try:
-        # Strategy 1: Base64-encoded JSON from environment (for Render/cloud)
+        # Strategy 1: JSON from GOOGLE_CREDENTIALS_JSON env var (Base64 or Raw)
         if settings.google_credentials_json:
             logger.info("Initializing Firebase from GOOGLE_CREDENTIALS_JSON env var.")
-            decoded = base64.b64decode(settings.google_credentials_json)
-            cred_dict = json.loads(decoded)
+            val = settings.google_credentials_json.strip()
+            if val.startswith('{'):
+                cred_dict = json.loads(val)
+            else:
+                decoded = base64.b64decode(val)
+                cred_dict = json.loads(decoded)
             cred = credentials.Certificate(cred_dict)
         else:
-            # Strategy 2: Local file path
-            logger.info("Initializing Firebase from file: %s", settings.firebase_credentials_path)
-            cred = credentials.Certificate(settings.firebase_credentials_path)
+            # Strategy 2: Local file path OR Accidentally raw JSON in path var
+            logger.info("Initializing Firebase from FIREBASE_CREDENTIALS_PATH: %s...", settings.firebase_credentials_path[:20])
+            val = settings.firebase_credentials_path.strip()
+            if val.startswith('{'):
+                cred_dict = json.loads(val)
+                cred = credentials.Certificate(cred_dict)
+            else:
+                cred = credentials.Certificate(val)
 
         firebase_admin.initialize_app(cred)
         _db = firestore.client()
