@@ -17,7 +17,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
   const [reviewText, setReviewText] = useState('');
   const [selectedReviewItem, setSelectedReviewItem] = useState<string>(MOCK_MENU[0].id);
   const [rating, setRating] = useState(5);
-  
+
   const addReview = useStore(state => state.addReview);
   const trendingItems = MOCK_MENU.slice(0, 3);
 
@@ -49,8 +49,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
           <div className="flex flex-col gap-1">
             <h1 className="text-on-surface text-[42px] leading-10 font-serif font-bold italic tracking-tight">Reflo</h1>
             <div className="flex items-center gap-1 text-on-surface-variant text-sm font-normal">
-              <MapPin className="w-3.5 h-3.5" />
-              <span>Connaught Place, Delhi</span>
+
             </div>
           </div>
           <div className="w-10 h-10 rounded-full bg-primary-container text-primary flex items-center justify-center font-medium text-sm">
@@ -68,7 +67,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
 
           <div className="flex flex-col gap-4">
             {/* Gradient Button - Cream */}
-            <button 
+            <button
               onClick={() => setShowTextReviewModal(true)}
               className="w-full h-[60px] btn-primary-cream rounded-full font-medium text-[16px] tracking-wide flex items-center justify-center gap-3 transition-transform active:scale-[0.98]"
             >
@@ -77,7 +76,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
             </button>
 
             {/* Glassy/Surface Button - Updated for Spiced Theme */}
-            <button 
+            <button
               onClick={() => setShowVoiceAssistant(true)}
               className="w-full h-[60px] btn-secondary-glass rounded-full font-medium text-[16px] tracking-wide flex items-center justify-center gap-3 hover:bg-white/50 transition-all active:scale-[0.98]"
             >
@@ -91,39 +90,6 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
           </p>
         </section>
 
-        {/* ORDER STATUS CARD - Glass Card with Progress Ring */}
-        <section className="glass-card rounded-[32px] p-6 flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Order #2841</div>
-            <h3 className="text-on-surface text-[18px] font-normal">Preparing your meal</h3>
-            <p className="text-on-surface-variant text-sm mt-1">Est. time: 12 mins</p>
-          </div>
-          
-          {/* Multi-colored Circular Progress Indicator */}
-          <div className="relative w-14 h-14 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-              {/* Background Ring */}
-              <path
-                className="text-surface-container-high"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              {/* Colored Segments - Theme Colors */}
-              <path
-                stroke="var(--color-primary)"
-                strokeDasharray="60, 100"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                fill="none"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-            </svg>
-            <Clock className="w-5 h-5 text-on-surface-variant absolute" />
-          </div>
-        </section>
-
         {/* TRENDING LIST */}
         <section className="pb-4">
           <div className="flex items-center justify-between mb-4 px-2">
@@ -134,7 +100,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
           <div className="flex flex-col gap-6 px-2">
             {trendingItems.map((item, idx) => {
               const isEven = idx % 2 === 0;
-              
+
               return (
                 <motion.div
                   key={item.id}
@@ -146,7 +112,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
                   className="relative group cursor-pointer"
                 >
                   {/* Main Pill Card */}
-                  <div 
+                  <div
                     className={cn(
                       "relative min-h-[140px] rounded-[32px] p-4 flex flex-col justify-center shadow-xl transition-transform duration-300 group-hover:scale-[1.02]",
                       "bg-[#5D4037] text-[#FFF8E1]", // Opaque dark brown background
@@ -155,12 +121,12 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
                   >
                     {/* Decorative Background Pattern */}
                     <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden rounded-[32px]">
-                       <svg width="100%" height="100%">
-                         <pattern id={`pattern-${item.id}`} x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                           <circle cx="2" cy="2" r="1" fill="currentColor" />
-                         </pattern>
-                         <rect width="100%" height="100%" fill={`url(#pattern-${item.id})`} />
-                       </svg>
+                      <svg width="100%" height="100%">
+                        <pattern id={`pattern-${item.id}`} x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                          <circle cx="2" cy="2" r="1" fill="currentColor" />
+                        </pattern>
+                        <rect width="100%" height="100%" fill={`url(#pattern-${item.id})`} />
+                      </svg>
                     </div>
 
                     {/* Rating Star - Top Left of the Red Box (Card) */}
@@ -176,7 +142,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
                       )}>
                         {item.name}
                       </h3>
-                      
+
                       <p className="text-[10px] text-[#FFF8E1]/80 font-medium leading-relaxed line-clamp-2 mb-1 relative z-10 max-w-[160px]">
                         {item.description}
                       </p>
@@ -187,7 +153,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
                       "absolute bottom-3 flex items-center gap-2 z-30",
                       isEven ? "right-4" : "left-4"
                     )}>
-                      <button 
+                      <button
                         className="w-7 h-7 rounded-full bg-[#D89020] text-[#4E342E] shadow-lg flex items-center justify-center transition-transform hover:scale-110 active:scale-95"
                       >
                         <Plus className="w-4 h-4" />
@@ -197,15 +163,15 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
                   </div>
 
                   {/* Circular Image - Breaking out of the container */}
-                  <div 
+                  <div
                     className={cn(
                       "absolute top-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-[#F2AC57] shadow-2xl z-20 overflow-hidden bg-surface",
                       isEven ? "-left-2" : "-right-2"
                     )}
                   >
-                    <img 
-                      src={item.image} 
-                      alt={item.name} 
+                    <img
+                      src={item.image}
+                      alt={item.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       referrerPolicy="no-referrer"
                     />
@@ -220,8 +186,8 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
 
       {/* Voice Assistant Modal */}
       {showVoiceAssistant && (
-        <VoiceReviewAssistant 
-          onReviewGenerated={handleVoiceReviewGenerated} 
+        <VoiceReviewAssistant
+          onReviewGenerated={handleVoiceReviewGenerated}
           onClose={() => setShowVoiceAssistant(false)}
         />
       )}
@@ -230,7 +196,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
       <AnimatePresence>
         {showTextReviewModal && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
@@ -254,7 +220,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
               <div className="mb-5">
                 <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Select Item</label>
                 <div className="relative">
-                  <select 
+                  <select
                     value={selectedReviewItem}
                     onChange={(e) => setSelectedReviewItem(e.target.value)}
                     className="w-full bg-[#FFF8E1] p-4 rounded-[24px] text-[#5D4037] font-medium appearance-none focus:outline-none focus:ring-2 focus:ring-[#8D4004]/20"
@@ -290,7 +256,7 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={handleSubmitReview}
                 className="w-full btn-primary-cream text-[#FFF8E1] py-4 rounded-[24px] font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
               >

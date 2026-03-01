@@ -42,14 +42,14 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
     <div className="bg-surface min-h-screen pb-24">
       {/* Header Image */}
       <div className="relative h-80 w-full">
-        <img 
-          src={item.image} 
-          alt={item.name} 
+        <img
+          src={item.image}
+          alt={item.name}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
-        <button 
+        <button
           onClick={onBack}
           className="absolute top-4 left-4 bg-surface/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-surface/30"
         >
@@ -72,9 +72,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-6">
-          <span className="px-3 py-1 rounded-full bg-surface-container text-xs font-medium text-on-surface-variant flex items-center gap-1">
-            <Clock className="w-3 h-3" /> {item.prepTime} min
-          </span>
+
           <span className="px-3 py-1 rounded-full bg-surface-container text-xs font-medium text-on-surface-variant">
             {item.category}
           </span>
@@ -116,7 +114,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-on-surface">Reviews</h2>
-            <button 
+            <button
               onClick={() => setShowReviewForm(!showReviewForm)}
               className="text-primary font-bold text-sm bg-primary-container px-4 py-2 rounded-full hover:bg-primary-container/80 transition-colors"
             >
@@ -125,13 +123,13 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
           </div>
 
           {showReviewForm && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="bg-surface-container p-4 rounded-2xl mb-6 overflow-hidden"
             >
               <h3 className="font-medium mb-3">Add your review</h3>
-              
+
               <div className="flex gap-2 mb-4">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button key={star} onClick={() => setUserRating(star)}>
@@ -147,7 +145,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
                   placeholder="Share your experience..."
                   className="w-full bg-surface p-3 rounded-xl border border-outline/20 focus:outline-none focus:border-primary min-h-[100px] text-sm pr-12"
                 />
-                <button 
+                <button
                   onClick={() => setShowVoiceAssistant(true)}
                   className="absolute bottom-3 right-3 p-2 bg-primary/10 rounded-full text-primary hover:bg-primary/20 transition-colors"
                 >
@@ -155,7 +153,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
                 </button>
               </div>
 
-              <button 
+              <button
                 onClick={handleSubmitReview}
                 className="w-full mt-3 bg-primary text-on-primary py-3 rounded-xl font-medium"
               >
@@ -165,7 +163,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
           )}
 
           {showVoiceAssistant && (
-            <VoiceReviewAssistant 
+            <VoiceReviewAssistant
               onReviewGenerated={(text) => {
                 setReviewText(text);
                 setShowVoiceAssistant(false);
@@ -184,9 +182,9 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
                   </div>
                   <div className="flex gap-0.5 mb-2">
                     {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        className={`w-3 h-3 ${i < review.rating ? 'fill-primary text-primary' : 'text-outline/30'}`} 
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${i < review.rating ? 'fill-primary text-primary' : 'text-outline/30'}`}
                       />
                     ))}
                   </div>
@@ -204,22 +202,22 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
       <div className="fixed bottom-0 left-0 right-0 bg-surface border-t border-outline/10 p-4 pb-safe z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
         <div className="flex items-center justify-between gap-4 max-w-md mx-auto">
           <div className="flex items-center gap-3 bg-surface-container-high px-4 py-2 rounded-full h-14">
-            <button 
+            <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant text-on-surface"
             >
               <Minus className="w-4 h-4" />
             </button>
             <span className="font-bold w-6 text-center text-on-surface">{quantity}</span>
-            <button 
+            <button
               onClick={() => setQuantity(quantity + 1)}
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant text-on-surface"
             >
               <Plus className="w-4 h-4" />
             </button>
           </div>
-          
-          <button 
+
+          <button
             onClick={handleAddToCart}
             className="flex-1 btn-primary-cream text-on-primary h-14 rounded-full font-bold text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all"
           >

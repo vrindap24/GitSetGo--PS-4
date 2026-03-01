@@ -1,3 +1,7 @@
+import mangoLassiImg from '../mangolassi.png';
+import masalaDosaImg from '../masaladosa.png';
+import haraBharaKababImg from '../harabharakabab.png';
+
 export interface Review {
   id: string;
   userName: string;
@@ -51,19 +55,19 @@ export const MOCK_MENU: MenuItem[] = [
     ingredients: ['Paneer', 'Tomato', 'Cream', 'Bell Peppers', 'Spices'],
     sentimentSummary: { taste: 'positive', portion: 'positive', spice: 'mixed' },
     reviews: [
-      { 
-        id: 'r1', 
-        userName: 'Rahul K.', 
-        rating: 5, 
-        text: 'The paneer was so soft and the gravy was perfect!', 
+      {
+        id: 'r1',
+        userName: 'Rahul K.',
+        rating: 5,
+        text: 'The paneer was so soft and the gravy was perfect!',
         date: '2023-10-15',
         tags: [{ label: 'Taste', sentiment: 'positive' }, { label: 'Texture', sentiment: 'positive' }]
       },
-      { 
-        id: 'r2', 
-        userName: 'Sarah J.', 
-        rating: 4, 
-        text: 'Delicious, but a bit too spicy for my taste.', 
+      {
+        id: 'r2',
+        userName: 'Sarah J.',
+        rating: 4,
+        text: 'Delicious, but a bit too spicy for my taste.',
         date: '2023-10-12',
         tags: [{ label: 'Taste', sentiment: 'positive' }, { label: 'Spice', sentiment: 'negative' }]
       }
@@ -97,12 +101,21 @@ export const MOCK_MENU: MenuItem[] = [
     description: 'Healthy and delicious spinach and green pea patties, shallow fried to perfection.',
     price: 220,
     category: 'Starters',
-    image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: haraBharaKababImg,
     rating: 4.7,
     prepTime: 20,
     ingredients: ['Spinach', 'Green Peas', 'Potatoes', 'Spices'],
     sentimentSummary: { taste: 'positive', portion: 'positive', spice: 'positive' },
-    reviews: []
+    reviews: [
+      {
+        id: 'r4',
+        userName: 'Aisha K.',
+        rating: 5,
+        text: 'The best starter ever! So soft from inside and crunchy outside.',
+        date: '2023-11-20',
+        tags: [{ label: 'Taste', sentiment: 'positive' }]
+      }
+    ]
   },
   {
     id: '4',
@@ -110,12 +123,21 @@ export const MOCK_MENU: MenuItem[] = [
     description: 'Refreshing yogurt based drink with sweet mango',
     price: 120,
     category: 'Drinks',
-    image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=800&auto=format&fit=crop',
+    image: mangoLassiImg,
     rating: 4.9,
     prepTime: 5,
     ingredients: ['Yogurt', 'Mango Pulp', 'Sugar', 'Cardamom'],
     sentimentSummary: { taste: 'positive', portion: 'positive', spice: 'positive' },
-    reviews: []
+    reviews: [
+      {
+        id: 'r5',
+        userName: 'Vikram S.',
+        rating: 5,
+        text: 'Perfectly sweet and refreshing drink after a spicy meal.',
+        date: '2023-12-05',
+        tags: [{ label: 'Flavor', sentiment: 'positive' }]
+      }
+    ]
   },
   {
     id: '5',
@@ -136,12 +158,21 @@ export const MOCK_MENU: MenuItem[] = [
     description: 'Crispy fermented rice crepe stuffed with spiced potato filling. Served with coconut chutney and sambar.',
     price: 180,
     category: 'Main Course',
-    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: masalaDosaImg,
     rating: 4.8,
     prepTime: 15,
     ingredients: ['Rice Batter', 'Potatoes', 'Onions', 'Mustard Seeds', 'Curry Leaves'],
     sentimentSummary: { taste: 'positive', portion: 'positive', spice: 'positive' },
-    reviews: []
+    reviews: [
+      {
+        id: 'r6',
+        userName: 'Priya R.',
+        rating: 5,
+        text: 'Crispy, hot, and delicious. The sambar is highly recommended!',
+        date: '2024-01-10',
+        tags: [{ label: 'Taste', sentiment: 'positive' }]
+      }
+    ]
   },
   {
     id: '7',
