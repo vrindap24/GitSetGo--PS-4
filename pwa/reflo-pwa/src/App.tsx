@@ -59,9 +59,9 @@ export default function App() {
   };
 
   return (
-    <div className="bg-background min-h-screen max-w-md mx-auto relative shadow-2xl overflow-hidden font-sans text-on-background">
+    <div className="bg-background h-[100dvh] max-w-md mx-auto relative shadow-2xl overflow-hidden font-sans text-on-background flex flex-col">
       {/* Main Content */}
-      <div className="h-full overflow-y-auto scrollbar-hide">
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
         {renderContent()}
       </div>
 

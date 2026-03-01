@@ -71,7 +71,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
   };
 
   return (
-    <div className="bg-surface min-h-screen pb-24">
+    <div className="bg-surface flex flex-col min-h-full pb-0 relative">
       {/* Header Image */}
       <div className="relative h-80 w-full">
         <img
@@ -232,7 +232,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-surface border-t border-outline/10 p-4 pb-safe z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <div className="sticky bottom-0 left-0 right-0 bg-surface border-t border-outline/10 p-4 pb-safe z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] mt-auto">
         <div className="flex items-center justify-between gap-4 max-w-md mx-auto">
           <div className="flex items-center gap-3 bg-surface-container-high px-4 py-2 rounded-full h-14">
             <button

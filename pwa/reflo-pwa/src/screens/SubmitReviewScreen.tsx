@@ -95,7 +95,7 @@ export function SubmitReviewScreen({ onBack, onSuccess }: Props) {
     }
 
     return (
-        <div className="min-h-screen bg-background pb-32">
+        <div className="flex flex-col min-h-full bg-background relative">
             {/* Header */}
             <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-outline/10 px-4 py-3">
                 <div className="flex items-center gap-3">
@@ -209,7 +209,7 @@ export function SubmitReviewScreen({ onBack, onSuccess }: Props) {
             </div>
 
             {/* Bottom Action Bar */}
-            <div className="fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl border-t border-outline/10 p-4 pb-safe z-40 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
+            <div className="sticky bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl border-t border-outline/10 p-4 pb-safe z-40 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] mt-auto">
                 <div className="max-w-md mx-auto">
                     <AnimatePresence>
                         {error && (
