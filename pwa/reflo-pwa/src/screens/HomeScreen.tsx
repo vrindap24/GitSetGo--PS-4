@@ -208,60 +208,67 @@ export function HomeScreen({ onNavigate, onItemClick }: HomeScreenProps) {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 bg-[#F0EAE0] rounded-t-[32px] z-50 p-6 pb-safe max-h-[90vh] overflow-y-auto shadow-2xl"
+              className="fixed bottom-0 left-0 right-0 bg-[#F0EAE0] rounded-t-[32px] z-50 p-6 pb-safe max-h-[90dvh] shadow-2xl flex flex-col"
             >
-              <div className="flex justify-between items-center mb-6">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-6 shrink-0">
                 <h2 className="text-2xl font-bold text-[#5D4037]">Write Review</h2>
                 <button onClick={() => setShowTextReviewModal(false)} className="p-2 hover:bg-black/5 rounded-full text-[#5D4037]">
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <div className="mb-5">
-                <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Select Item</label>
-                <div className="relative">
-                  <select
-                    value={selectedReviewItem}
-                    onChange={(e) => setSelectedReviewItem(e.target.value)}
-                    className="w-full bg-[#FFF8E1] p-4 rounded-[24px] text-[#5D4037] font-medium appearance-none focus:outline-none focus:ring-2 focus:ring-[#8D4004]/20"
-                  >
-                    {MOCK_MENU.map(item => (
-                      <option key={item.id} value={item.id}>{item.name}</option>
+              {/* Scrollable Form Body */}
+              <div className="overflow-y-auto flex-1 scrollbar-hide pb-4">
+                <div className="mb-5">
+                  <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Select Item</label>
+                  <div className="relative">
+                    <select
+                      value={selectedReviewItem}
+                      onChange={(e) => setSelectedReviewItem(e.target.value)}
+                      className="w-full bg-[#FFF8E1] p-4 rounded-[24px] text-[#5D4037] font-medium appearance-none focus:outline-none focus:ring-2 focus:ring-[#8D4004]/20"
+                    >
+                      {MOCK_MENU.map(item => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                      ))}
+                    </select>
+                    <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8D6E63] rotate-90 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="mb-5">
+                  <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Rating</label>
+                  <div className="flex gap-3">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <button key={star} onClick={() => setRating(star)} className="transition-transform active:scale-90">
+                        <Star className={`w-10 h-10 ${star <= rating ? 'fill-[#8D4004] text-[#8D4004]' : 'text-[#8D6E63]/30'}`} />
+                      </button>
                     ))}
-                  </select>
-                  <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8D6E63] rotate-90 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="mb-2">
+                  <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Your Review</label>
+                  <div className="relative">
+                    <textarea
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      placeholder="Share your experience..."
+                      className="w-full bg-[#FFF8E1] p-5 rounded-[28px] text-[#5D4037] placeholder:text-[#8D6E63]/50 focus:outline-none focus:ring-2 focus:ring-[#8D4004]/20 min-h-[140px] resize-none text-lg"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="mb-5">
-                <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Rating</label>
-                <div className="flex gap-3">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <button key={star} onClick={() => setRating(star)} className="transition-transform active:scale-90">
-                      <Star className={`w-10 h-10 ${star <= rating ? 'fill-[#8D4004] text-[#8D4004]' : 'text-[#8D6E63]/30'}`} />
-                    </button>
-                  ))}
-                </div>
+              {/* Sticky Footer */}
+              <div className="pt-4 mt-auto shrink-0 bg-[#F0EAE0]">
+                <button
+                  onClick={handleSubmitReview}
+                  className="w-full btn-primary-cream text-[#FFF8E1] py-4 rounded-[24px] font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                >
+                  Send Review
+                </button>
               </div>
-
-              <div className="mb-8">
-                <label className="block text-sm font-medium text-[#8D6E63] mb-2 ml-1">Your Review</label>
-                <div className="relative">
-                  <textarea
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    placeholder="Share your experience..."
-                    className="w-full bg-[#FFF8E1] p-5 rounded-[28px] text-[#5D4037] placeholder:text-[#8D6E63]/50 focus:outline-none focus:ring-2 focus:ring-[#8D4004]/20 min-h-[140px] resize-none text-lg"
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={handleSubmitReview}
-                className="w-full btn-primary-cream text-[#FFF8E1] py-4 rounded-[24px] font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-              >
-                Send Review
-              </button>
             </motion.div>
           </>
         )}
