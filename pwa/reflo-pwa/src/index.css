@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Spiced Gold Theme */
+  
+  /* Primary - Deep Terracotta/Brown (Buttons) */
+  --color-primary: #8D4004; 
+  --color-on-primary: #FFF8E1; 
+  --color-primary-container: #FFDBB0;
+  --color-on-primary-container: #3E1C00;
+  
+  /* Secondary - Warm Gold */
+  --color-secondary: #D48C24; 
+  --color-on-secondary: #FFFFFF;
+  --color-secondary-container: #FFDDA6;
+  --color-on-secondary-container: #2A1800;
+  
+  /* Tertiary - Earthy Orange */
+  --color-tertiary: #C06C18;
+  --color-on-tertiary: #FFFFFF;
+  --color-tertiary-container: #FFCC80;
+  --color-on-tertiary-container: #3E2723;
+
+  /* Background - Rich Golden Gradient Base */
+  --color-background: #F2AC57; 
+  --color-on-background: #3E2723; /* Dark Brown Text */
+  
+  /* Surface - Glassy Cream */
+  --color-surface: rgba(255, 252, 240, 0.85); 
+  --color-on-surface: #3E2723;
+  --color-on-surface-variant: #5D4037;
+  
+  /* Surface Containers */
+  --color-surface-container-lowest: #FFFDE7;
+  --color-surface-container-low: #FFF8E1;
+  --color-surface-container: rgba(255, 248, 225, 0.6); /* Glassy Light Gold */
+  --color-surface-container-high: rgba(255, 236, 179, 0.7);
+  --color-surface-container-highest: #FFCA28;
+
+  /* Outline */
+  --color-outline: #8D6E63;
+  --color-outline-variant: #BCAAA4;
+
+  /* Google Colors (Standard) */
+  --color-google-red: #DB4437;
+  --color-google-yellow: #F4B400;
+  --color-google-green: #0F9D58;
+  --color-google-blue: #4285F4;
+  
+  /* Error */
+  --color-error: #BA1A1A;
+  --color-on-error: #FFFFFF;
+  
+  --font-sans: "Roboto", "Google Sans", "Inter", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-sans antialiased;
+    /* Textured/Gradient Background from Image */
+    background-image: linear-gradient(180deg, #FAD9A6 0%, #F2AC57 40%, #E69A45 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  
+  /* Material 3 Elevation */
+  .elevation-1 {
+    box-shadow: 0px 1px 2px 0px rgba(62, 39, 35, 0.15), 0px 1px 3px 1px rgba(62, 39, 35, 0.10);
+  }
+  .elevation-2 {
+    box-shadow: 0px 1px 2px 0px rgba(62, 39, 35, 0.15), 0px 2px 6px 2px rgba(62, 39, 35, 0.10);
+  }
+  
+  /* Glass Card - Updated for Warm Theme */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(62, 39, 35, 0.08);
+  }
+
+  /* Primary Button - Deep Spiced Gradient */
+  .btn-primary-cream {
+    background: linear-gradient(135deg, #A04000 0%, #753000 100%);
+    color: #FFF8E1;
+    box-shadow: 0 4px 12px rgba(117, 48, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Secondary Button - Glassy Gold */
+  .btn-secondary-glass {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #3E2723;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Bottom Nav - Dark Brown Glass */
+  .nav-glass {
+    background: rgba(62, 39, 35, 0.9); /* Dark Brown */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+  }
+}

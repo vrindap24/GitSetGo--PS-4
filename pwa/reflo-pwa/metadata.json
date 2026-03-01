@@ -1,0 +1,5 @@
+{
+  "name": "Reflo App",
+  "description": "A mobile-first restaurant app with Material You design, featuring menu browsing, order tracking, and a Gemini-powered voice review assistant supporting Hindi and English.",
+  "requestFramePermissions": ["microphone"]
+}
