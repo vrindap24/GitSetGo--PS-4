@@ -3,7 +3,7 @@ import { BottomNav } from './components/BottomNav';
 import { HomeScreen } from './screens/HomeScreen';
 import { MenuScreen } from './screens/MenuScreen';
 import { ItemDetailScreen } from './screens/ItemDetailScreen';
-import { OrdersScreen } from './screens/OrdersScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
 import { ReviewsScreen } from './screens/ReviewsScreen';
 import { SubmitReviewScreen } from './screens/SubmitReviewScreen';
 import { MenuItem } from './data/mock';
@@ -30,7 +30,7 @@ export default function App() {
         placeOrder();
         setIsPaymentSuccess(false);
         setIsCartOpen(false);
-        setCurrentTab('orders');
+        setCurrentTab('home'); // Go home after payment
       }, 2000);
     }, 1000);
   };
@@ -49,8 +49,8 @@ export default function App() {
         return <HomeScreen onNavigate={setCurrentTab} onItemClick={setSelectedItem} />;
       case 'menu':
         return <MenuScreen onItemClick={setSelectedItem} />;
-      case 'orders':
-        return <OrdersScreen />;
+      case 'profile':
+        return <ProfileScreen />;
       case 'reviews':
         return <ReviewsScreen onSubmitReview={() => setShowSubmitReview(true)} />;
       default:

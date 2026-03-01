@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Utensils, History, ClipboardList, User } from 'lucide-react';
+import { Home, Utensils, History, User } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useStore } from '../store';
 import { motion } from 'motion/react';
@@ -17,7 +17,7 @@ export function BottomNav({ currentTab, onTabChange }: BottomNavProps) {
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'menu', icon: Utensils, label: 'Menu', badge: cartCount > 0 ? cartCount : undefined },
     { id: 'reviews', icon: History, label: 'History' },
-    { id: 'orders', icon: ClipboardList, label: 'Orders' },
+    { id: 'profile', icon: User, label: 'Profile' },
   ];
 
   return (

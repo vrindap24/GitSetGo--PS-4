@@ -40,7 +40,8 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
         platform: 'Internal',
         branch_id: 'b4', // Fixed branch for demo
         rating: userRating,
-        review_text: reviewText.trim()
+        review_text: reviewText.trim(),
+        reviewer_name: 'PWA User'
       });
 
       // Save to local history

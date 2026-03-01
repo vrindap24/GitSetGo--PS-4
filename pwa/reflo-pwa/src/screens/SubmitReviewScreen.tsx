@@ -47,7 +47,7 @@ export function SubmitReviewScreen({ onBack, onSuccess }: Props) {
                 branch_id: DEFAULT_BRANCH_ID,
                 rating,
                 review_text: reviewText.trim(),
-                reviewer_name: customerName.trim() || undefined,
+                reviewer_name: customerName.trim() || 'PWA User',
                 staff_tagged: staffName.trim() || undefined,
                 categories: selectedCategories.length > 0 ? selectedCategories : undefined,
             });

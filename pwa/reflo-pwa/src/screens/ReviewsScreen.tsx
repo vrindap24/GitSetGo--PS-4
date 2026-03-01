@@ -7,20 +7,19 @@ import { fetchReviews, ReviewResponse } from '../services/api';
 
 export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void }) {
   const [filter, setFilter] = useState('All');
-  const localReviews = useStore(state => state.myReviews) || [];
-  const [liveData, setLiveData] = useState<Record<string, ReviewResponse>>({});
+  const [reviews, setReviews] = useState<ReviewResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReviews()
       .then(data => {
-        const map: Record<string, ReviewResponse> = {};
-        data.forEach(r => map[r.id] = r);
-        setLiveData(map);
+        // Only show reviews belonging to our mock "PWA User" profile
+        const myReviews = data.filter(r => r.reviewer_name === 'PWA User');
+        setReviews(myReviews);
       })
       .catch(err => {
-        console.error("Failed to sync live reviews", err);
+        console.error("Failed to fetch reviews", err);
         setError("Failed to connect to the server. Please check your connection.");
       })
       .finally(() => setLoading(false));
@@ -29,7 +28,7 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
   const filters = ['All', 'Positive', 'Critical'];
 
   // Filter reviews based on selected filter
-  const filteredReviews = localReviews.filter(r => {
+  const filteredReviews = reviews.filter(r => {
     if (filter === 'All') return true;
     if (filter === 'Positive') return r.rating >= 4;
     if (filter === 'Critical') return r.rating <= 2;
@@ -37,13 +36,13 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
   });
 
   // Calculate stats from real data
-  const totalReviews = localReviews.length;
+  const totalReviews = reviews.length;
   const avgRating = totalReviews > 0
-    ? (localReviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews).toFixed(1)
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews).toFixed(1)
     : '0.0';
   const ratingDistribution = [5, 4, 3, 2, 1].map(
     star => totalReviews > 0
-      ? Math.round((localReviews.filter(r => r.rating === star).length / totalReviews) * 100)
+      ? Math.round((reviews.filter(r => r.rating === star).length / totalReviews) * 100)
       : 0
   );
 
@@ -155,80 +154,74 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
             No reviews found for this filter.
           </div>
         )}
-        {filteredReviews.map((localReview, idx) => {
-          // Merge live backend data (like AI processing tags and status) if it exists
-          const liveReview = liveData[localReview.id];
-          const review = { ...localReview, ...liveReview, itemName: localReview.itemName };
-
-          return (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.05 }}
-              className="bg-surface-container p-5 rounded-2xl shadow-sm border border-outline/5"
-            >
-              <div className="flex justify-between items-start mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-sm">
-                    {review.itemName ? review.itemName.charAt(0) : 'Y'}
-                  </div>
-                  <div>
-                    <div className="font-bold text-on-surface text-sm">You reviewed {review.itemName || 'an item'}</div>
-                    <div className="text-xs text-on-surface-variant">
-                      {formatTime(review.timestamp)}
-                      {liveReview?.processed ? ' • ✅ Synced & Analyzed' : ' • ⏳ Processing'}
-                    </div>
-                  </div>
+        {filteredReviews.map((review, idx) => (
+          <motion.div
+            key={review.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+            className="bg-surface-container p-5 rounded-2xl shadow-sm border border-outline/5"
+          >
+            <div className="flex justify-between items-start mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-sm">
+                  {review.reviewer_name?.charAt(0) || 'P'}
                 </div>
-                <div className="bg-surface-container-highest px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-bold text-on-surface">
-                  <Star className="w-3 h-3 fill-primary text-primary" />
-                  {review.rating}
+                <div>
+                  <div className="font-bold text-on-surface text-sm">You reviewed an item</div>
+                  <div className="text-xs text-on-surface-variant">
+                    {formatTime(review.timestamp)}
+                    {review.processed ? ' • ✅ Synced & Analyzed' : ' • ⏳ Processing'}
+                  </div>
                 </div>
               </div>
+              <div className="bg-surface-container-highest px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-bold text-on-surface">
+                <Star className="w-3 h-3 fill-primary text-primary" />
+                {review.rating}
+              </div>
+            </div>
 
-              <p className="text-on-surface text-sm leading-relaxed mb-3">
-                {review.review_text}
-              </p>
+            <p className="text-on-surface text-sm leading-relaxed mb-3">
+              {review.review_text}
+            </p>
 
-              {/* AI Sentiment Tags (only visible if processed by backend) */}
-              {review.ai_analysis && (
-                <div className="flex flex-wrap gap-2 mb-3 mt-4 pt-4 border-t border-outline/10">
-                  <div className="w-full text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">
-                    AI Analysis Status
-                  </div>
-                  {review.ai_analysis.categories?.map((tag: string, i: number) => (
-                    <span
-                      key={i}
-                      className="text-[10px] px-2 py-1 rounded-md font-medium uppercase tracking-wide border bg-surface-container-high text-on-surface-variant border-outline/20"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {review.ai_analysis.sentiment_label && (
-                    <span
-                      className={cn(
-                        "text-[10px] px-2 py-1 rounded-md font-medium uppercase tracking-wide border",
-                        review.ai_analysis.sentiment_label === 'Positive'
-                          ? "bg-google-green/10 text-google-green border-google-green/20"
-                          : review.ai_analysis.sentiment_label === 'Negative'
-                            ? "bg-google-red/10 text-google-red border-google-red/20"
-                            : "bg-surface-container-high text-on-surface-variant border-outline/20"
-                      )}
-                    >
-                      {review.ai_analysis.sentiment_label}
-                    </span>
-                  )}
-                  {review.ai_analysis.risk_score > 70 && (
-                    <span className="text-[10px] px-2 py-1 rounded-md font-medium border bg-google-red/10 text-google-red border-google-red/20 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> Escalated to Manager
-                    </span>
-                  )}
+            {/* AI Sentiment Tags (only visible if processed by backend) */}
+            {review.ai_analysis && (
+              <div className="flex flex-wrap gap-2 mb-3 mt-4 pt-4 border-t border-outline/10">
+                <div className="w-full text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">
+                  AI Analysis Status
                 </div>
-              )}
-            </motion.div>
-          )
-        })}
+                {review.ai_analysis.categories?.map((tag: string, i: number) => (
+                  <span
+                    key={i}
+                    className="text-[10px] px-2 py-1 rounded-md font-medium uppercase tracking-wide border bg-surface-container-high text-on-surface-variant border-outline/20"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {review.ai_analysis.sentiment_label && (
+                  <span
+                    className={cn(
+                      "text-[10px] px-2 py-1 rounded-md font-medium uppercase tracking-wide border",
+                      review.ai_analysis.sentiment_label === 'Positive'
+                        ? "bg-google-green/10 text-google-green border-google-green/20"
+                        : review.ai_analysis.sentiment_label === 'Negative'
+                          ? "bg-google-red/10 text-google-red border-google-red/20"
+                          : "bg-surface-container-high text-on-surface-variant border-outline/20"
+                    )}
+                  >
+                    {review.ai_analysis.sentiment_label}
+                  </span>
+                )}
+                {review.ai_analysis.risk_score > 70 && (
+                  <span className="text-[10px] px-2 py-1 rounded-md font-medium border bg-google-red/10 text-google-red border-google-red/20 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" /> Escalated to Manager
+                  </span>
+                )}
+              </div>
+            )}
+          </motion.div>
+        ))}
       </div>
 
     </div>
