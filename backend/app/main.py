@@ -25,6 +25,7 @@ from app.routers import (
     insight_routes,
     review_routes,
     staff_routes,
+    agent_routes,
 )
 
 # ---------------------------------------------------------------------------
@@ -176,6 +177,7 @@ app.include_router(staff_routes.router, prefix=API_V1, tags=["Staff"])
 app.include_router(analytics_routes.router, prefix=API_V1, tags=["Analytics"])
 app.include_router(ingestion_routes.router, prefix=API_V1, tags=["Ingestion"])
 app.include_router(insight_routes.router, prefix=API_V1, tags=["Insights"])
+app.include_router(agent_routes.router, prefix=API_V1, tags=["Agents"])
 
 
 # ---------------------------------------------------------------------------

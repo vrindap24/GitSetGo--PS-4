@@ -22,19 +22,19 @@ _MOCK_GOOGLE_REVIEWS: list[dict[str, Any]] = [
     {
         "reviewer_name": "Priya Sharma",
         "rating": 5,
-        "review_text": "Amazing food and excellent service! The butter chicken was outstanding. Will definitely come back.",
+        "review_text": "Amazing food at Prasad Food Divine! The butter chicken was outstanding. Will definitely come back to this branch.",
         "timestamp": "2024-01-15T10:30:00Z",
     },
     {
         "reviewer_name": "Rahul Mehta",
         "rating": 2,
-        "review_text": "Very slow service. We waited 45 minutes for our order. The food was cold when it arrived. Terrible experience.",
+        "review_text": "Very slow service at Prasad Food Divine today. We waited 45 minutes for our order. The food was cold when it arrived.",
         "timestamp": "2024-01-16T19:00:00Z",
     },
     {
         "reviewer_name": "Ananya Patel",
         "rating": 4,
-        "review_text": "Good ambience and tasty food. Staff was friendly, especially Rahul who was very attentive. Slightly overpriced though.",
+        "review_text": "Good ambience and tasty food at Prasad Food Divine Kalyan. Staff was friendly, especially Rahul who was very attentive.",
         "timestamp": "2024-01-17T13:15:00Z",
     },
 ]
@@ -91,10 +91,10 @@ def normalize_review(
 
 
 async def ingest_from_google(branch_id: str) -> list[dict[str, Any]]:
-    """Pull reviews from Google Reviews API.
+    """Pull reviews from Google Places API (New).
 
-    🔶 PLACEHOLDER – Returns mock data for hackathon.
-    Replace with real Google Business Profile API integration.
+    Fetches real public reviews left by customers on Google Maps.
+    Falls back to mock data when GOOGLE_PLACES_API_KEY is not configured.
 
     Args:
         branch_id: Branch to associate the reviews with.
@@ -102,13 +102,46 @@ async def ingest_from_google(branch_id: str) -> list[dict[str, Any]]:
     Returns:
         List of normalized review dicts.
     """
+    from app.config import get_settings
+    from app.services.google_places_service import fetch_place_reviews, transform_places_review
+
+    settings = get_settings()
+
+    # ── Real API path ────────────────────────────────────────────────────
+    if settings.google_places_api_key and settings.google_place_ids:
+        logger.info("🌐 Fetching REAL Google reviews for branch %s", branch_id)
+
+        # Parse place_id:branch_id pairs, find the one for this branch
+        place_id = None
+        for pair in settings.google_place_ids.split(","):
+            pair = pair.strip()
+            if ":" in pair:
+                pid, bid = pair.split(":", 1)
+                if bid.strip() == branch_id:
+                    place_id = pid.strip()
+                    break
+            else:
+                # If no branch mapping, use first place_id for all branches
+                place_id = pair.strip()
+                break
+
+        if place_id:
+            raw_reviews = await fetch_place_reviews(
+                settings.google_places_api_key, place_id
+            )
+            if raw_reviews:
+                results = []
+                for r in raw_reviews:
+                    transformed = transform_places_review(r, branch_id)
+                    results.append(normalize_review(transformed, "Google", branch_id))
+                return results
+            else:
+                logger.warning("⚠️ No reviews returned from Places API, falling back to mock data")
+        else:
+            logger.warning("⚠️ No place_id mapped for branch %s, falling back to mock data", branch_id)
+
+    # ── Mock fallback ────────────────────────────────────────────────────
     logger.info("🔶 [MOCK] Ingesting Google Reviews for branch %s", branch_id)
-
-    # TODO: Replace with real Google Business Profile API call
-    # from google.oauth2 import service_account
-    # credentials = service_account.Credentials.from_service_account_file(...)
-    # response = requests.get(f"https://mybusiness.googleapis.com/v4/accounts/{account_id}/locations/{location_id}/reviews")
-
     return [
         normalize_review(r, "Google", branch_id) for r in _MOCK_GOOGLE_REVIEWS
     ]

@@ -10,6 +10,7 @@ Triggers:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from typing import Any
 
@@ -87,7 +88,7 @@ def evaluate_escalation(
     }
 
 
-def handle_escalation(
+async def handle_escalation(
     review_id: str,
     branch_id: str,
     risk_score: int,
@@ -112,68 +113,84 @@ def handle_escalation(
     )
 
     # Attempt to notify manager
-    _notify_manager(branch_id, review_id, triggers)
+    await _notify_manager(branch_id, review_id, triggers)
 
     return escalation_id
 
 
-def _notify_manager(
+async def _notify_manager(
     branch_id: str,
     review_id: str,
     triggers: list[str],
 ) -> None:
     """Send notification to branch manager.
 
-    🔶 PLACEHOLDER – Currently logs to console.
-    Replace with real WhatsApp/SMS API integration.
+    Uses WhatsApp Cloud API when configured, otherwise logs to console.
     """
     settings = get_settings()
 
-    # Try to get manager contact from Firestore
+    # Try to get manager contact and review details from Firestore
     manager_contact = "Unknown"
+    manager_name = "Manager"
+    branch_name = branch_id
+    review_text = ""
+    rating = 0
+
     try:
         db = get_db()
-        doc = db.collection("branches").document(branch_id).get()
-        if doc.exists:
-            data = doc.to_dict()
+
+        # Get branch info
+        branch_doc = db.collection("branches").document(branch_id).get()
+        if branch_doc.exists:
+            data = branch_doc.to_dict()
             manager_contact = data.get("manager_contact", "Unknown")
-            manager_name = data.get("manager_name", "Manager")
-        else:
-            manager_name = "Manager"
-    except Exception:
-        manager_name = "Manager"
+            manager_name = data.get("manager_name", data.get("manager", "Manager"))
+            branch_name = data.get("name", branch_id)
 
-    # 🔶 PLACEHOLDER: WhatsApp notification
-    if settings.whatsapp_api_key:
-        # TODO: Replace with real WhatsApp Business API call
-        # import httpx
-        # async with httpx.AsyncClient() as client:
-        #     await client.post("https://api.whatsapp.com/...", json={
-        #         "to": manager_contact,
-        #         "message": f"⚠️ Escalation alert for review {review_id}"
-        #     })
+        # Get review info
+        review_doc = db.collection("reviews").document(review_id).get()
+        if review_doc.exists:
+            r_data = review_doc.to_dict()
+            review_text = r_data.get("review_text", "")
+            rating = r_data.get("rating", 0)
+    except Exception as e:
+        logger.warning("Could not fetch details for notification: %s", e)
+
+    # Determine priority
+    priority = "High" if len(triggers) >= 2 else "Medium"
+    if len(triggers) >= 3:
+        priority = "Critical"
+
+    # ── WhatsApp Cloud API ────────────────────────────────────────────
+    if settings.whatsapp_access_token and settings.whatsapp_phone_number_id:
+        from app.services.whatsapp_service import send_whatsapp_alert
+
+        # Get recipients: explicit list or manager contact
+        recipients = []
+        if settings.escalation_whatsapp_recipients:
+            recipients = [r.strip() for r in settings.escalation_whatsapp_recipients.split(",")]
+        elif manager_contact != "Unknown":
+            recipients = [manager_contact]
+
+        for phone in recipients:
+            await send_whatsapp_alert(
+                phone_number_id=settings.whatsapp_phone_number_id,
+                access_token=settings.whatsapp_access_token,
+                to_phone=phone,
+                review_text=review_text,
+                branch_name=branch_name,
+                rating=rating,
+                triggers=triggers,
+                priority=priority,
+            )
+
         logger.info(
-            "🔶 [PLACEHOLDER] Would send WhatsApp to %s (%s): Escalation for review %s – Triggers: %s",
-            manager_name, manager_contact, review_id, ", ".join(triggers),
+            "📱 WhatsApp escalation sent to %d recipients for review %s",
+            len(recipients), review_id,
         )
     else:
         logger.info(
-            "🔶 [MOCK] WhatsApp notification skipped (no API key). "
-            "Would notify %s (%s) about review %s – Triggers: %s",
+            "⚠️ WhatsApp not configured. Would notify %s (%s) about review %s – Triggers: %s. "
+            "Set WHATSAPP_ACCESS_TOKEN and WHATSAPP_PHONE_NUMBER_ID in .env to enable.",
             manager_name, manager_contact, review_id, ", ".join(triggers),
-        )
-
-    # 🔶 PLACEHOLDER: SMS notification
-    if settings.sms_api_key:
-        # TODO: Replace with real Twilio SMS call
-        # from twilio.rest import Client
-        # client = Client(account_sid, auth_token)
-        # client.messages.create(body=..., to=manager_contact, from_=...)
-        logger.info(
-            "🔶 [PLACEHOLDER] Would send SMS to %s: Escalation for review %s",
-            manager_contact, review_id,
-        )
-    else:
-        logger.info(
-            "🔶 [MOCK] SMS notification skipped (no API key)."
         )

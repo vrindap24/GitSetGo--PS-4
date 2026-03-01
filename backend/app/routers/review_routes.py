@@ -48,6 +48,7 @@ async def create_review(
         review_text=clean_text,
         reviewer_name=review.reviewer_name,
         staff_tagged=review.staff_tagged,
+        categories=review.categories,
         processed=False,
     )
 
@@ -102,3 +103,42 @@ async def list_reviews(
         results.append(ReviewResponse(id=doc.id, **data))
 
     return results
+
+
+@router.get("/test-whatsapp")
+async def test_whatsapp():
+    """Send a test WhatsApp message to verify the integration."""
+    from app.services.whatsapp_service import send_whatsapp_alert
+
+    settings = get_settings()
+
+    if not settings.whatsapp_access_token or not settings.whatsapp_phone_number_id:
+        return {
+            "error": "WhatsApp not configured",
+            "whatsapp_access_token_set": bool(settings.whatsapp_access_token),
+            "whatsapp_phone_number_id_set": bool(settings.whatsapp_phone_number_id),
+            "escalation_whatsapp_recipients": settings.escalation_whatsapp_recipients,
+        }
+
+    recipients = []
+    if settings.escalation_whatsapp_recipients:
+        recipients = [r.strip() for r in settings.escalation_whatsapp_recipients.split(",")]
+
+    if not recipients:
+        return {"error": "No recipients configured in ESCALATION_WHATSAPP_RECIPIENTS"}
+
+    results = []
+    for phone in recipients:
+        result = await send_whatsapp_alert(
+            phone_number_id=settings.whatsapp_phone_number_id,
+            access_token=settings.whatsapp_access_token,
+            to_phone=phone,
+            review_text="TEST: This is a test escalation alert from Reflo. If you see this, WhatsApp integration is working!",
+            branch_name="Powai Test Branch",
+            rating=1,
+            triggers=["Low rating: 1/5", "Keywords: disgusting, complaint"],
+            priority="Critical",
+        )
+        results.append({"phone": phone, "result": result})
+
+    return {"status": "sent", "recipients": results}

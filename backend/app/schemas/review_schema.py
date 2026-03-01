@@ -78,6 +78,7 @@ class ReviewCreate(BaseModel):
     )
     reviewer_name: Optional[str] = Field(None, max_length=100)
     staff_tagged: Optional[str] = Field(None, min_length=1)
+    categories: Optional[list[str]] = Field(None, description="Pre-selected category tags")
 
     model_config = {"json_schema_extra": {
         "examples": [

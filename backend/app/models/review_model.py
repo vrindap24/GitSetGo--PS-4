@@ -82,6 +82,7 @@ class ReviewModel:
         review_text: str = "",
         reviewer_name: str | None = None,
         staff_tagged: str | None = None,
+        categories: list[str] | None = None,
         timestamp: datetime | None = None,
         processed: bool = False,
         ai_analysis: dict[str, Any] | None = None,
@@ -93,6 +94,7 @@ class ReviewModel:
         self.review_text = review_text
         self.reviewer_name = reviewer_name
         self.staff_tagged = staff_tagged
+        self.categories = categories or []
         self.timestamp = timestamp or datetime.now(timezone.utc)
         self.processed = processed
         self.ai_analysis = ai_analysis
@@ -107,6 +109,7 @@ class ReviewModel:
             "review_text": self.review_text,
             "reviewer_name": self.reviewer_name,
             "staff_tagged": self.staff_tagged,
+            "categories": self.categories,
             "timestamp": self.timestamp,
             "processed": self.processed,
             "ai_analysis": self.ai_analysis,
@@ -123,6 +126,7 @@ class ReviewModel:
             review_text=data.get("review_text", ""),
             reviewer_name=data.get("reviewer_name"),
             staff_tagged=data.get("staff_tagged"),
+            categories=data.get("categories", []),
             timestamp=data.get("timestamp"),
             processed=data.get("processed", False),
             ai_analysis=data.get("ai_analysis"),

@@ -1,0 +1,5 @@
+{
+  "name": "Divine Analytics",
+  "description": "AI-powered Review Management System for Prasad Food Divine",
+  "requestFramePermissions": ["microphone"]
+}

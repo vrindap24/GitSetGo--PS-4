@@ -25,11 +25,25 @@ class Settings(BaseSettings):
     internal_api_key: str = ""
 
     # Notification placeholders (replace with real API keys)
-    whatsapp_api_key: str = ""
+    whatsapp_api_key: str = ""  # Legacy field
     sms_api_key: str = ""
+
+    # WhatsApp Cloud API (Meta)
+    whatsapp_access_token: str = ""
+    whatsapp_phone_number_id: str = ""
+    escalation_whatsapp_recipients: str = ""  # Comma-separated phone numbers
 
     # CORS
     allowed_origins: str = "http://localhost:3000,http://localhost:5173,http://localhost:3001"
+
+    # Google Business Profile API
+    google_business_account_id: str = ""
+    google_business_location_map: str = ""  # JSON: {"locations/123": "b1", "locations/456": "b2"}
+
+    # Google Places API (New) — fetch public reviews from Google Maps
+    google_places_api_key: str = ""
+    # Comma-separated: "ChIJ...:b1" (place_id:branch_id pairs) - Add Prasad Food Divine Place IDs here
+    google_place_ids: str = ""
 
     # Constants
     max_review_length: int = 1000

@@ -53,13 +53,18 @@ async def process_review(review_id: str) -> None:
     review_text: str = data.get("review_text", "")
     rating: int = data.get("rating", 5)
     branch_id: str = data.get("branch_id", "")
+    existing_categories: list[str] = data.get("categories", [])
 
     logger.info("🔄 Processing review %s through agent pipeline …", review_id)
 
     # ── Agent 1: Categorization ──────────────────────────────────────────
     logger.info("  🏷️  Agent 1: Categorization …")
     cat_result = await categorization_agent.categorize(review_text, rating)
-    categories = cat_result.get("categories", [])
+    ai_categories = cat_result.get("categories", [])
+    
+    # Merge existing (user-submitted) categories with AI categories
+    categories = list(set(existing_categories + ai_categories))
+    
     staff_mentioned = cat_result.get("staff_mentioned")
     emotional_intensity = float(cat_result.get("emotional_intensity", 0.0))
 
@@ -117,7 +122,7 @@ async def process_review(review_id: str) -> None:
 
     escalation_id = None
     if escalation_required:
-        escalation_id = escalation_agent.handle_escalation(
+        escalation_id = await escalation_agent.handle_escalation(
             review_id=review_id,
             branch_id=branch_id,
             risk_score=risk_score,

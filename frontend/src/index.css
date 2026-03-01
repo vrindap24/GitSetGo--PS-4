@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+
+  --color-tertiary: var(--md-sys-color-tertiary);
+  --color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+
+  --color-error: var(--md-sys-color-error);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-error-container: var(--md-sys-color-error-container);
+  --color-on-error-container: var(--md-sys-color-on-error-container);
+
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
+
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-surface-variant: var(--md-sys-color-surface-variant);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  --shadow-elevation-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --shadow-elevation-2: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --shadow-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+}
+
+:root {
+  /* Core Palette */
+  --md-ref-palette-primary40: #004D40;
+  --md-ref-palette-primary90: #B2DFDB;
+  /* Lighter emerald */
+  --md-ref-palette-primary10: #00251A;
+
+  --md-ref-palette-secondary40: #D4AF37;
+  --md-ref-palette-secondary90: #F9E79F;
+
+  --md-ref-palette-neutral98: #FCF9F1;
+  /* Warm background */
+  --md-ref-palette-neutral96: #F5F5F5;
+  --md-ref-palette-neutral90: #E0E0E0;
+  --md-ref-palette-neutral10: #1A1C1E;
+
+  /* System Colors */
+  --md-sys-color-primary: #004D40;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #B2DFDB;
+  --md-sys-color-on-primary-container: #00201A;
+
+  --md-sys-color-secondary: #856300;
+  /* Darker gold for text contrast */
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #FFDF9E;
+  --md-sys-color-on-secondary-container: #2A1F00;
+
+  --md-sys-color-tertiary: #386A20;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #B7F397;
+  --md-sys-color-on-tertiary-container: #042100;
+
+  --md-sys-color-error: #BA1A1A;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFDAD6;
+  --md-sys-color-on-error-container: #410002;
+
+  --md-sys-color-background: #FCF9F1;
+  --md-sys-color-on-background: #1A1C1E;
+
+  --md-sys-color-surface: #FCF9F1;
+  --md-sys-color-on-surface: #1A1C1E;
+
+  --md-sys-color-surface-variant: #E0E2EC;
+  --md-sys-color-on-surface-variant: #44474F;
+
+  --md-sys-color-outline: #74777F;
+  --md-sys-color-outline-variant: #C4C6CF;
+}
+
+body {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: var(--font-sans);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Material 3 Utilities */
+.m3-card {
+  background-color: var(--md-sys-color-surface);
+  border-radius: 16px;
+  /* Surface Container Low/High simulation */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+  box-shadow: var(--shadow-elevation-1);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.m3-card:hover {
+  box-shadow: var(--shadow-elevation-2);
+}
+
+.m3-icon-button {
+  border-radius: 9999px;
+  padding: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.m3-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-outline);
+}
+
+/* ── Floating Animations for Decorative SVGs ─────────────────────── */
+@keyframes floatSlow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes floatMedium {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 8s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: floatMedium 6s ease-in-out infinite;
+}
