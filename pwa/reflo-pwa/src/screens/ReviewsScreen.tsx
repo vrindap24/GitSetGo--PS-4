@@ -97,8 +97,8 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
   return (
     <div className="pb-24 pt-4 px-4 bg-background min-h-screen">
       <header className="mb-6">
-        <h1 className="text-3xl font-bold text-on-surface mb-2">Review Hub</h1>
-        <p className="text-on-surface-variant text-sm">See what everyone is saying</p>
+        <h1 className="text-3xl font-bold text-on-surface mb-2">Review History</h1>
+        <p className="text-on-surface-variant text-sm">See past thoughts and feedback</p>
       </header>
 
       {/* Overall Rating Card */}
@@ -223,16 +223,6 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
         ))}
       </div>
 
-      {/* FAB for writing review */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onSubmitReview}
-        className="fixed bottom-24 right-6 btn-primary-cream text-on-primary h-14 px-6 rounded-2xl shadow-xl flex items-center gap-2 font-bold z-40"
-      >
-        <MessageSquare className="w-5 h-5" />
-        Write Review
-      </motion.button>
     </div>
   );
 }
