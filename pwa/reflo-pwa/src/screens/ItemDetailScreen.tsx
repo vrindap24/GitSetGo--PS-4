@@ -36,7 +36,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
 
     try {
       // Hit the live API so AI agent and WhatsApp escalations trigger
-      await submitReview({
+      const res = await submitReview({
         platform: 'Internal',
         branch_id: 'b4', // Fixed branch for demo
         rating: userRating,
@@ -45,7 +45,7 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
 
       // Save to local history
       addMyReview({
-        id: Math.random().toString(36).substring(7),
+        id: res.id,
         timestamp: new Date().toISOString(),
         rating: userRating,
         review_text: reviewText.trim(),
