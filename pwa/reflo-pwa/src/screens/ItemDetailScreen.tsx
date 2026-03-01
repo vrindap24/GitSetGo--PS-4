@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { MenuItem } from '../data/mock';
 import { ArrowLeft, Star, Minus, Plus, ShoppingBag, Clock, Info, ChevronRight, Mic } from 'lucide-react';
 import { useStore } from '../store';
+import { submitReview } from '../services/api';
 import { VoiceReviewAssistant } from '../components/VoiceReviewAssistant';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 
 interface ItemDetailScreenProps {
@@ -15,10 +16,12 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
   const [quantity, setQuantity] = useState(1);
   const addToCart = useStore(state => state.addToCart);
   const addReview = useStore(state => state.addReview);
+  const addMyReview = useStore(state => state.addMyReview);
   const [reviewText, setReviewText] = useState('');
   const [userRating, setUserRating] = useState(5);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [showVoiceAssistant, setShowVoiceAssistant] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -27,15 +30,43 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
     onBack();
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     if (!reviewText.trim()) return;
-    addReview(item.id, {
-      userName: 'You',
-      rating: userRating,
-      text: reviewText
-    });
-    setReviewText('');
-    setShowReviewForm(false);
+    setSubmitting(true);
+
+    try {
+      // Hit the live API so AI agent and WhatsApp escalations trigger
+      await submitReview({
+        platform: 'Internal',
+        branch_id: 'b4', // Fixed branch for demo
+        rating: userRating,
+        review_text: reviewText.trim()
+      });
+
+      // Save to local history
+      addMyReview({
+        id: Math.random().toString(36).substring(7),
+        timestamp: new Date().toISOString(),
+        rating: userRating,
+        review_text: reviewText.trim(),
+        itemName: item.name,
+      });
+
+      // Update mock view for this session
+      addReview(item.id, {
+        userName: 'You',
+        rating: userRating,
+        text: reviewText
+      });
+
+      setReviewText('');
+      setShowReviewForm(false);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to submit review");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -155,9 +186,10 @@ export function ItemDetailScreen({ item, onBack }: ItemDetailScreenProps) {
 
               <button
                 onClick={handleSubmitReview}
-                className="w-full mt-3 bg-primary text-on-primary py-3 rounded-xl font-medium"
+                disabled={submitting}
+                className="w-full mt-3 bg-primary text-on-primary py-3 rounded-xl font-medium disabled:opacity-50"
               >
-                Post Review
+                {submitting ? 'Submitting...' : 'Post Review'}
               </button>
             </motion.div>
           )}

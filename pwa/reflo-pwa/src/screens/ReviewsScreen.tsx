@@ -1,41 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Star, MessageSquare, ThumbsUp, ThumbsDown, Camera, Filter, Search, RefreshCw, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, MessageSquare, ThumbsUp, RefreshCw, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../lib/utils';
-import { fetchReviews, ReviewResponse } from '../services/api';
+import { useStore } from '../store';
 
 export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void }) {
   const [filter, setFilter] = useState('All');
-  const [reviews, setReviews] = useState<ReviewResponse[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const reviews = useStore(state => state.myReviews) || [];
 
-  const filters = ['All', 'Positive', 'Critical', 'Google', 'Internal'];
-
-  const loadReviews = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchReviews();
-      setReviews(data);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load reviews');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadReviews();
-  }, []);
+  const filters = ['All', 'Positive', 'Critical'];
 
   // Filter reviews based on selected filter
   const filteredReviews = reviews.filter(r => {
     if (filter === 'All') return true;
     if (filter === 'Positive') return r.rating >= 4;
     if (filter === 'Critical') return r.rating <= 2;
-    if (filter === 'Google') return r.platform === 'Google';
-    if (filter === 'Internal') return r.platform === 'Internal';
     return true;
   });
 
@@ -68,31 +47,6 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
       return dateString;
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
-          <RefreshCw className="w-8 h-8 text-primary" />
-        </motion.div>
-        <p className="text-on-surface-variant text-sm animate-pulse">Loading reviews…</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 px-4 text-center">
-        <div className="w-14 h-14 rounded-full bg-error-container flex items-center justify-center">
-          <AlertCircle className="w-7 h-7 text-error" />
-        </div>
-        <p className="text-sm text-on-surface-variant">{error}</p>
-        <button onClick={loadReviews} className="px-5 py-2 bg-primary text-on-primary rounded-full text-sm font-bold flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" /> Retry
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className="pb-24 pt-4 px-4 bg-background min-h-screen">
@@ -166,11 +120,11 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
             <div className="flex justify-between items-start mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-sm">
-                  {(review.reviewer_name || 'A').charAt(0)}
+                  {review.itemName ? review.itemName.charAt(0) : 'Y'}
                 </div>
                 <div>
-                  <div className="font-bold text-on-surface text-sm">{review.reviewer_name || 'Anonymous'}</div>
-                  <div className="text-xs text-on-surface-variant">{formatTime(review.timestamp)} • {review.platform}</div>
+                  <div className="font-bold text-on-surface text-sm">You reviewed {review.itemName || 'an item'}</div>
+                  <div className="text-xs text-on-surface-variant">{formatTime(review.timestamp)}</div>
                 </div>
               </div>
               <div className="bg-surface-container-highest px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-bold text-on-surface">
@@ -182,34 +136,6 @@ export function ReviewsScreen({ onSubmitReview }: { onSubmitReview?: () => void 
             <p className="text-on-surface text-sm leading-relaxed mb-3">
               {review.review_text}
             </p>
-
-            {/* AI Sentiment Tags */}
-            {review.ai_analysis && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {review.ai_analysis.categories?.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="text-[10px] px-2 py-1 rounded-md font-medium uppercase tracking-wide border bg-surface-container-high text-on-surface-variant border-outline/20"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {review.ai_analysis.sentiment_label && (
-                  <span
-                    className={cn(
-                      "text-[10px] px-2 py-1 rounded-md font-medium uppercase tracking-wide border",
-                      review.ai_analysis.sentiment_label === 'Positive'
-                        ? "bg-google-green/10 text-google-green border-google-green/20"
-                        : review.ai_analysis.sentiment_label === 'Negative'
-                          ? "bg-google-red/10 text-google-red border-google-red/20"
-                          : "bg-surface-container-high text-on-surface-variant border-outline/20"
-                    )}
-                  >
-                    {review.ai_analysis.sentiment_label}
-                  </span>
-                )}
-              </div>
-            )}
 
             <div className="flex items-center gap-4 text-on-surface-variant text-xs mt-2 border-t border-outline/10 pt-3">
               <button className="flex items-center gap-1 hover:text-primary transition-colors">
