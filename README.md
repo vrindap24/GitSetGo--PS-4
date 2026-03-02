@@ -1,94 +1,109 @@
-# ReviewSense – AI-Powered Review Management Backend
+# Reflo: AI-Powered Restaurant Review Management Ecosystem
 
-A centralized review management platform backend built with **FastAPI**, **Firebase Firestore**, and **Google Gemini AI**. It collects reviews, runs asynchronous AI analysis (sentiment, categorization, risk scoring), auto-escalates critical reviews, and exposes analytics APIs for dashboard visualization.
+**Reflo** is a comprehensive, enterprise-ready platform designed to transform how restaurants manage customer feedback and engagement. By leveraging state-of-the-art AI, Reflo automates the analysis of reviews, identifies operational risks in real-time, and provides actionable insights across multiple branches through a seamless, multi-platform experience.
 
-## Features
+---
 
-- **Review Ingestion** – Accept reviews from PWA and external connectors
-- **AI Analysis Pipeline** – Automatic sentiment analysis, categorization, risk scoring via Gemini AI
-- **Smart Escalation** – Auto-create escalations for high-risk or low-rated reviews
-- **Multi-Branch Analytics** – Branch overview, comparison, and staff performance APIs
-- **Background Processing** – Asynchronous AI processing using FastAPI BackgroundTasks
+## 🚀 The Ecosystem
 
-## Tech Stack
+Reflo is composed of four primary components, each tailored for a specific stakeholder in the restaurant ecosystem:
 
-| Component | Technology |
-|-----------|-----------|
-| Framework | FastAPI (Python 3.11+) |
-| Database | Firebase Firestore |
-| AI | Google Gemini 2.0 Flash |
-| Deployment | Render |
+### 🧠 [Backend Service](./backend)
+The "Brain" of Reflo. A high-performance API built with **FastAPI** that orchestrates AI analysis and data persistence.
+- **AI Analysis Pipeline**: Automatically processes reviews using **Google Gemini 2.0 Flash** for sentiment analysis, risk categorization, and performance scoring.
+- **Automated Escalation**: Triggers real-time alerts and creates escalation tasks for high-risk or low-rated reviews.
+- **Data Persistence**: Scalable and secure storage using **Firebase Firestore**.
+- **Comprehensive Analytics**: Exposes detailed metrics for branch comparisons and staff performance.
 
-## Quick Start
+### 📊 [HQ Dashboard (Frontend)](./frontend)
+A powerful management console for restaurant owners and regional managers.
+- **Executive Overview**: Real-time visualization of performance metrics across all branches using **Recharts**.
+- **Branch Management**: Deep-dive into specific location data, staff metrics, and escalation statuses.
+- **Modern UI**: Built with **React**, **Vite**, and **Tailwind CSS** for a premium, responsive experience.
+
+### 📱 [Customer PWA](./pwa/reflo-pwa)
+A mobile-first, installable Progressive Web App (PWA) that closes the loop between customers and the kitchen.
+- **Dynamic Menu**: Browsable digital menu with item-specific details.
+- **Seamless Feedback**: Intuitive review submission flow optimized for mobile devices.
+- **Tech Stack**: Powered by **Zustand** for state management and **Material UI (MUI)** for a native-like feel.
+
+### 🌐 [Landing Page](./landing-page)
+The public-facing marketing presence of Reflo.
+- **High-Impact Visuals**: Smooth animations powered by **Framer Motion**.
+- **Responsive Design**: Clean and professional introduction to the Reflo value proposition.
+
+---
+
+## 🛠️ Architecture Overview
+
+Reflo follows a modern, decoupled architecture:
+
+```mermaid
+graph TD
+    subgraph "Customer Layer"
+        PWA[Customer PWA]
+        LP[Landing Page]
+    end
+
+    subgraph "Management Layer"
+        HQ[HQ Dashboard]
+    end
+
+    subgraph "Core Service Layer"
+        API[FastAPI Backend]
+    end
+
+    subgraph "External Services"
+        Firebase[(Firebase Firestore)]
+        Gemini[[Google Gemini AI]]
+    end
+
+    PWA -->|Submit Review| API
+    HQ -->|Fetch Analytics| API
+    API -->|Store/Retrieve| Firebase
+    API -->|Analyze Sentiment| Gemini
+```
+
+---
+
+## ⚡ Quick Start
 
 ### Prerequisites
+- **Python 3.11+** (for Backend)
+- **Node.js 18+** (for Frontend/PWA/Landing Page)
+- **Firebase Project** with Firestore enabled
+- **Google Gemini API Key**
 
-- Python 3.11+
-- Firebase project with Firestore enabled
-- Google Gemini API key
-- Firebase service account JSON file
-
-### Setup
-
+### 1. Backend Setup
 ```bash
 cd backend
 python -m venv .venv
-
-# Windows
-.venv\Scripts\activate
-
-# macOS/Linux
-source .venv/bin/activate
-
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+# Configure .env (see backend/README.md)
+uvicorn app.main:app --reload
 ```
 
-### Configuration
-
-Copy `.env.example` to `.env` and fill in your values:
-
+### 2. Frontend/PWA/Landing Page Setup
+Each frontend component follows a similar setup pattern:
 ```bash
-cp .env.example .env
+cd [component-directory]
+npm install
+npm run dev
 ```
 
-| Variable | Description |
-|----------|-------------|
-| `FIREBASE_CREDENTIALS_PATH` | Path to Firebase service account JSON |
-| `GEMINI_API_KEY` | Google Gemini API key |
-| `ESCALATION_THRESHOLD` | Risk score threshold for auto-escalation (default: 70) |
-| `ALLOWED_ORIGINS` | Comma-separated CORS origins |
+---
 
-### Run
+## 📄 Documentation
 
-```bash
-uvicorn app.main:app --reload --port 8000
-```
+For detailed setup instructions and API specifications for each component, please refer to their respective directories:
 
-API docs available at: `http://localhost:8000/docs`
+- [Backend Documentation](./backend/README.md)
+- [HQ Dashboard Documentation](./frontend/README.md)
+- [Customer PWA Documentation](./pwa/reflo-pwa/README.md)
 
-## API Endpoints
+---
 
-All endpoints are prefixed with `/api/v1`.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/reviews` | Submit a new review |
-| `GET` | `/reviews` | List reviews (with filters) |
-| `POST` | `/branches` | Create a branch |
-| `GET` | `/branches` | List all branches |
-| `GET` | `/branches/{id}` | Get branch by ID |
-| `POST` | `/staff` | Add staff member |
-| `GET` | `/staff` | List staff (filter by branch) |
-| `GET` | `/escalations` | List escalations |
-| `PATCH` | `/escalations/{id}` | Update escalation status |
-| `GET` | `/analytics/branch-overview` | Branch analytics overview |
-| `GET` | `/analytics/branch-comparison` | Compare all branches |
-| `GET` | `/analytics/staff-performance` | Staff performance metrics |
-
-## Deployment
-
-This project deploys on **Render** using `render.yaml`. Push to your connected Git repo and Render will auto-deploy.
-
-## License
-
-MIT
+<p align="center">
+  Built with ❤️ by GitSetGo
+</p>
