@@ -1,40 +1,180 @@
-# Reflo: AI-Powered Restaurant Review Management Ecosystem
+# 🍽️ Reflo
+### AI-Powered Restaurant Review Management Ecosystem
 
-**Reflo** is a comprehensive, enterprise-ready platform designed to transform how restaurants manage customer feedback and engagement. By leveraging state-of-the-art AI, Reflo automates the analysis of reviews, identifies operational risks in real-time, and provides actionable insights across multiple branches through a seamless, multi-platform experience.
+<p align="center">
+  <strong>Turn customer feedback into actionable restaurant intelligence.</strong>
+</p>
 
----
-
-## 🚀 The Ecosystem
-
-Reflo is composed of four primary components, each tailored for a specific stakeholder in the restaurant ecosystem:
-
-### 🧠 [Backend Service](./backend)
-The "Brain" of Reflo. A high-performance API built with **FastAPI** that orchestrates AI analysis and data persistence.
-- **AI Analysis Pipeline**: Automatically processes reviews using **Google Gemini 2.0 Flash** for sentiment analysis, risk categorization, and performance scoring.
-- **Automated Escalation**: Triggers real-time alerts and creates escalation tasks for high-risk or low-rated reviews.
-- **Data Persistence**: Scalable and secure storage using **Firebase Firestore**.
-- **Comprehensive Analytics**: Exposes detailed metrics for branch comparisons and staff performance.
-
-### 📊 [HQ Dashboard (Frontend)](./frontend)
-A powerful management console for restaurant owners and regional managers.
-- **Executive Overview**: Real-time visualization of performance metrics across all branches using **Recharts**.
-- **Branch Management**: Deep-dive into specific location data, staff metrics, and escalation statuses.
-- **Modern UI**: Built with **React**, **Vite**, and **Tailwind CSS** for a premium, responsive experience.
-
-### 📱 [Customer PWA](./pwa/reflo-pwa)
-A mobile-first, installable Progressive Web App (PWA) that closes the loop between customers and the kitchen.
-- **Dynamic Menu**: Browsable digital menu with item-specific details.
-- **Seamless Feedback**: Intuitive review submission flow optimized for mobile devices.
-- **Tech Stack**: Powered by **Zustand** for state management and **Material UI (MUI)** for a native-like feel.
-
-### 🌐 [Landing Page](./landing-page)
-The public-facing marketing presence of Reflo.
-- **High-Impact Visuals**: Smooth animations powered by **Framer Motion**.
-- **Responsive Design**: Clean and professional introduction to the Reflo value proposition.
+<p align="center">
+  Reflo uses AI to analyze customer reviews, detect operational risks,
+  and provide actionable insights across multiple restaurant branches.
+</p>
 
 ---
 
-## 🛠️ Architecture Overview
+## 🚀 Overview
+
+**Reflo** is a comprehensive, enterprise-ready platform designed to transform
+how restaurants manage customer feedback and engagement.
+
+By leveraging **Google Gemini AI**, Reflo automatically analyzes customer
+reviews, identifies operational risks in real time, and provides actionable
+insights through a seamless multi-platform experience.
+
+The ecosystem connects:
+
+**Customers → Feedback → AI Analysis → Risk Detection → Management Insights**
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---|---|
+| 🤖 **AI Review Analysis** | Automatically analyzes customer reviews using Google Gemini |
+| 😊 **Sentiment Analysis** | Identifies positive, neutral, and negative customer sentiment |
+| 🚨 **Risk Detection** | Detects high-risk or low-rated reviews requiring attention |
+| ⚡ **Automated Escalation** | Creates escalation tasks for critical feedback |
+| 📊 **Branch Analytics** | Compare performance across multiple restaurant branches |
+| 👥 **Staff Performance** | Track staff-related metrics and operational performance |
+| 📱 **Customer PWA** | Mobile-first experience for customers to browse menus and submit reviews |
+| 🌐 **Centralized Dashboard** | Gives restaurant owners and managers a unified view of operations |
+| 🔄 **Real-Time Insights** | Converts incoming feedback into actionable operational intelligence |
+
+---
+
+# 🚀 The Ecosystem
+
+Reflo is composed of four primary components, each designed for a
+specific stakeholder in the restaurant ecosystem.
+
+---
+
+## 🧠 Backend Service
+
+The **Brain of Reflo**.
+
+A high-performance API built with **FastAPI** that orchestrates AI analysis,
+data persistence, review processing, and analytics.
+
+### Key capabilities
+
+- 🤖 **AI Analysis Pipeline**
+  - Processes reviews using **Google Gemini 2.0 Flash**
+  - Performs sentiment analysis
+  - Categorizes operational risks
+  - Generates performance scores
+
+- 🚨 **Automated Escalation**
+  - Detects high-risk or low-rated reviews
+  - Triggers alerts
+  - Creates escalation tasks
+
+- 🔥 **Data Persistence**
+  - Uses **Firebase Firestore**
+  - Provides scalable data storage
+
+- 📊 **Comprehensive Analytics**
+  - Branch-level performance metrics
+  - Staff performance insights
+  - Review analytics
+
+---
+
+## 📊 HQ Dashboard
+
+A powerful management console designed for **restaurant owners,
+regional managers, and decision-makers**.
+
+### Key capabilities
+
+- 📈 **Executive Overview**
+  - Visualizes performance metrics across branches
+  - Uses **Recharts** for data visualization
+
+- 🏢 **Branch Management**
+  - Inspect individual restaurant locations
+  - View branch-level metrics
+  - Monitor escalation statuses
+
+- 👥 **Staff Insights**
+  - Analyze staff-related performance metrics
+  - Identify operational trends
+
+- 🎨 **Modern Interface**
+  - Built with **React**
+  - Powered by **Vite**
+  - Styled with **Tailwind CSS**
+  - Responsive and component-driven UI
+
+---
+
+## 📱 Customer PWA
+
+A mobile-first, installable **Progressive Web App** that connects
+customers directly with the restaurant feedback ecosystem.
+
+### Key capabilities
+
+- 🍽️ **Dynamic Menu**
+  - Browse restaurant menus
+  - View item-specific details
+
+- 💬 **Seamless Feedback**
+  - Submit customer reviews
+  - Optimized for mobile devices
+
+- ⚡ **Modern State Management**
+  - Powered by **Zustand**
+
+- 🎨 **Native-Like Experience**
+  - Built with **Material UI (MUI)**
+
+---
+
+## 🌐 Landing Page
+
+The public-facing marketing experience for Reflo.
+
+### Highlights
+
+- ✨ High-impact visual design
+- 🎬 Smooth animations powered by **Framer Motion**
+- 📱 Responsive layouts
+- 🎯 Clear presentation of the Reflo value proposition
+
+---
+
+# 🛠️ Tech Stack
+
+### Frontend
+
+![React](https://img.shields.io/badge/React-2026-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-2026-purple?logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-2026-06B6D4?logo=tailwindcss)
+![TypeScript](https://img.shields.io/badge/TypeScript-2026-blue?logo=typescript)
+
+### Backend
+
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi)
+
+### AI & Data
+
+![Google Gemini](https://img.shields.io/badge/Google-Gemini_AI-4285F4)
+![Firebase](https://img.shields.io/badge/Firebase-Firestore-FFCA28?logo=firebase)
+
+### Other Technologies
+
+- Recharts
+- Zustand
+- Material UI
+- Framer Motion
+- Progressive Web App architecture
+
+---
+
+# 🏗️ Architecture
 
 Reflo follows a modern, decoupled architecture:
 
@@ -62,48 +202,3 @@ graph TD
     HQ -->|Fetch Analytics| API
     API -->|Store/Retrieve| Firebase
     API -->|Analyze Sentiment| Gemini
-```
-
----
-
-## ⚡ Quick Start
-
-### Prerequisites
-- **Python 3.11+** (for Backend)
-- **Node.js 18+** (for Frontend/PWA/Landing Page)
-- **Firebase Project** with Firestore enabled
-- **Google Gemini API Key**
-
-### 1. Backend Setup
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-# Configure .env (see backend/README.md)
-uvicorn app.main:app --reload
-```
-
-### 2. Frontend/PWA/Landing Page Setup
-Each frontend component follows a similar setup pattern:
-```bash
-cd [component-directory]
-npm install
-npm run dev
-```
-
----
-
-## 📄 Documentation
-
-For detailed setup instructions and API specifications for each component, please refer to their respective directories:
-
-- [Backend Documentation](./backend/README.md)
-- [HQ Dashboard Documentation](./frontend/README.md)
-- [Customer PWA Documentation](./pwa/reflo-pwa/README.md)
-
----
-
-<p align="center">
-  Built with ❤️ by GitSetGo
-</p>
